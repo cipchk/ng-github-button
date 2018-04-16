@@ -1,6 +1,6 @@
 {
     "name": "ng-github-button",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "./bundles/github-button.umd.js",
     "module": "./esm5/github-button.js",
     "es2015": "./esm2015/github-button.js",
