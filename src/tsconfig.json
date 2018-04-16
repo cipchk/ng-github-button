@@ -1,0 +1,22 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "sourceMap": false,
+        "outDir": "../out-tsc/app",
+        "baseUrl": "./",
+        "module": "es2015",
+        "types": [],
+        "paths": {
+            "ng-github-button": [
+                "../lib/src/module"
+            ],
+            "ng-github-button/*": [
+                "../lib/*"
+            ]
+        }
+    },
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts"
+    ]
+}
