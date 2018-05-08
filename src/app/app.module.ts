@@ -9,16 +9,9 @@ import { GithubButtonModule } from 'ng-github-button';
 import { AppComponent } from './app.component';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        CommonModule,
-        HighlightJsModule,
-        GithubButtonModule
-    ],
-    declarations: [ AppComponent ],
-    providers: [],
-    bootstrap: [AppComponent]
+  imports: [BrowserModule, CommonModule, HighlightJsModule, GithubButtonModule],
+  declarations: [AppComponent],
+  providers: [],
+  bootstrap: [AppComponent],
 })
-
-export class AppDemoModule {
-}
+export class AppDemoModule {}

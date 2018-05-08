@@ -6,8 +6,7 @@ rm -rf publish
 rm -rf __gen_lib
 rm -rf publish-es2015
 cp -r lib __gen_lib
-lessc --clean-css ./__gen_lib/src/style.less ./__gen_lib/src/style.css
-node ./scripts/inline.js
+node ./scripts/inline-template.js
 
 echo 'Compiling to es2015 via Angular compiler'
 $(npm bin)/ngc -p tsconfig-build.json -t es2015 --outDir publish-es2015/src
@@ -48,3 +47,4 @@ rm publish/src/index.d.ts publish/src/index.metadata.json
 
 echo 'Copying package.json'
 cp package.json publish/package.json
+cp README.md publish/README.md
