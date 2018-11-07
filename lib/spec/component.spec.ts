@@ -1,14 +1,8 @@
 import { Component, ViewChild, DebugElement } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-  async,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { GithubButtonModule } from '../ng-github-button.module';
+import { GithubButtonModule } from '../src/module';
 import { GithubButtonComponent } from '../src/component';
 
 describe('github-button', () => {
@@ -126,7 +120,8 @@ describe('github-button', () => {
     `,
 })
 class TestComponent {
-  @ViewChild('comp') comp: GithubButtonComponent;
+  @ViewChild('comp')
+  comp: GithubButtonComponent;
   type = 'stargazers';
   size: string;
   namespace: string;
