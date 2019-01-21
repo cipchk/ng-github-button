@@ -1,5 +1,5 @@
 import { Component, ViewChild, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { GithubButtonModule } from '../src/module';
@@ -25,7 +25,6 @@ describe('github-button', () => {
       };
     });
   }
-
   function getCountEl(): HTMLElement {
     return dl.query(By.css('.gh-count')).nativeElement as HTMLElement;
   }
@@ -44,10 +43,7 @@ describe('github-button', () => {
     dl = fixture.debugElement;
   });
 
-  afterEach(() => {
-    context.comp.ngOnDestroy();
-    win.XMLHttpRequest = oldXMLHttpRequest;
-  });
+  afterEach(() => (win.XMLHttpRequest = oldXMLHttpRequest));
 
   describe('[property]', () => {
     it(`#type="stargazers"`, () => {
@@ -95,33 +91,55 @@ describe('github-button', () => {
     });
   });
 
+  it('should be show count when request invalid data and showZero is true', () => {
+    genXhr(200, null);
+    context.type = 'forks';
+    context.showZero = true;
+    fixture.detectChanges();
+    expect(getCountEl().style.display).toBe('block');
+  });
+
   it('should be hide count when request invalid data', () => {
     genXhr(200, null);
     context.type = 'forks';
     fixture.detectChanges();
-    expect(getCountEl().textContent.trim().length).toBe(0);
+    expect(getCountEl().style.display).toBe('none');
   });
 
   it('should be hide count when invalid request', () => {
     genXhr(201, null);
     context.type = 'forks';
     fixture.detectChanges();
-    expect(getCountEl().textContent.trim().length).toBe(0);
+    expect(getCountEl().style.display).toBe('none');
+  });
+
+  it('should be cached data', () => {
+    genXhr(200, { stargazers_count: 10, subscribers_count: 11 });
+    context.type = 'stargazers';
+    fixture.detectChanges();
+    expect(getCount()).toBe(10);
+    context.type = 'subscribers';
+    fixture.detectChanges();
+    expect(getCount()).toBe(11);
   });
 });
 
 @Component({
   template: `
-    <github-button #comp
-    [type]="type"
-    [size]="size"
-    [namespace]="namespace"
-    [repo]="repo"></github-button>
-    `,
+    <github-button
+      #comp
+      [showZero]="showZero"
+      [type]="type"
+      [size]="size"
+      [namespace]="namespace"
+      [repo]="repo"
+    ></github-button>
+  `,
 })
 class TestComponent {
   @ViewChild('comp')
   comp: GithubButtonComponent;
+  showZero = false;
   type = 'stargazers';
   size: string;
   namespace: string;

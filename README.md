@@ -42,6 +42,7 @@ export class AppModule { }
 | `size` | `default,large` | - | - |
 | `namespace` | `string` | - | Your GitHub id or organization name. |
 | `repo` | `string` | - | The name of your repository. |
+| `showZero` | `boolean` | `false` | Can be show zero value |
 
 ## Troubleshooting
 

@@ -2,31 +2,36 @@ import {
   Component,
   Input,
   OnChanges,
-  OnDestroy,
-  SimpleChanges,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
+import { GithubButtonService } from './service';
 
 @Component({
   selector: 'github-button',
   template: `
-  <a class="gh-btn" href="{{repo_url}}" target="_blank">
-    <span class="gh-ico" aria-hidden="true"></span>
-    <span class="gh-text">{{typeToLabel[type]}}</span>
-  </a>
-  <a class="gh-count" target="_blank" href="{{count_url}}" [ngStyle]="{'display': count ? 'block' : 'none' }">
-    {{ count }}
-  </a>
-  <ng-content></ng-content>
+    <a class="gh-btn" href="{{ repo_url }}" target="_blank">
+      <span class="gh-ico" aria-hidden="true"></span>
+      <span class="gh-text">{{ typeToLabel[type] }}</span>
+    </a>
+    <a
+      class="gh-count"
+      target="_blank"
+      href="{{ count_url }}"
+      [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }"
+    >
+      {{ count }}
+    </a>
+    <ng-content></ng-content>
   `,
   preserveWhitespaces: false,
   styleUrls: ['./style.less'],
   host: {
     '[class.github-btn-large]': `size === 'large'`,
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GithubButtonComponent implements OnChanges, OnDestroy {
-  private xhr: any;
-
+export class GithubButtonComponent implements OnChanges {
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
@@ -47,6 +52,8 @@ export class GithubButtonComponent implements OnChanges, OnDestroy {
 
   @Input() repo: string;
 
+  @Input() showZero = false;
+
   // endregion
 
   get repo_url() {
@@ -59,39 +66,19 @@ export class GithubButtonComponent implements OnChanges, OnDestroy {
     ] || this.type}/`;
   }
 
+  constructor(
+    private srv: GithubButtonService,
+    private cdr: ChangeDetectorRef,
+  ) {
+    this.srv.notify.subscribe(res => this.setCount(res));
+  }
+
   private setCount(data: any) {
-    if (!data) return;
-    this.count = +data[`${this.type}_count`];
+    this.count = data ? data[`${this.type}_count`] : 0;
+    this.cdr.detectChanges();
   }
 
-  private req(): this {
-    this.clearXhr();
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        this.setCount(JSON.parse(xhr.responseText));
-      }
-    };
-    xhr.open(
-      'GET',
-      `//api.github.com/repos/${this.namespace}/${this.repo}`,
-      true,
-    );
-    xhr.send();
-    this.xhr = xhr;
-    return this;
-  }
-
-  private clearXhr() {
-    if (!this.xhr) return;
-    this.xhr.abort();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.req();
-  }
-
-  ngOnDestroy(): void {
-    this.clearXhr();
+  ngOnChanges(): void {
+    this.srv.req(this.namespace, this.repo);
   }
 }
