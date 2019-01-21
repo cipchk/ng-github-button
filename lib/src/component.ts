@@ -4,6 +4,7 @@ import {
   OnChanges,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
 import { GithubButtonService } from './service';
 
@@ -31,7 +32,7 @@ import { GithubButtonService } from './service';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GithubButtonComponent implements OnChanges {
+export class GithubButtonComponent implements OnChanges, OnInit {
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
@@ -70,12 +71,15 @@ export class GithubButtonComponent implements OnChanges {
     private srv: GithubButtonService,
     private cdr: ChangeDetectorRef,
   ) {
-    this.srv.notify.subscribe(res => this.setCount(res));
   }
 
   private setCount(data: any) {
     this.count = data ? data[`${this.type}_count`] : 0;
     this.cdr.detectChanges();
+  }
+
+  ngOnInit(): void {
+    this.srv.notify.subscribe(res => this.setCount(res));
   }
 
   ngOnChanges(): void {

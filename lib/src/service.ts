@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
   private cached: { [url: string]: any } = {};
-  private _notify = new Subject<{ [url: string]: any }>();
+  private _notify = new BehaviorSubject<{ [url: string]: any }>(null);
 
   get notify() {
     return this._notify.asObservable();
