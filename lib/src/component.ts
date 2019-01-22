@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { GithubButtonService } from './service';
 
@@ -30,6 +31,7 @@ import { GithubButtonService } from './service';
   host: {
     '[class.github-btn-large]': `size === 'large'`,
   },
+  encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GithubButtonComponent implements OnChanges, OnInit {

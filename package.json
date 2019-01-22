@@ -1,6 +1,6 @@
 {
   "name": "ng-github-button",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Unofficial GitHub buttons in Angular.",
   "repository": {
     "type": "git",
