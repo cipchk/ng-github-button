@@ -6,8 +6,10 @@ import {
   ChangeDetectorRef,
   OnInit,
   ViewEncapsulation,
+  OnDestroy,
 } from '@angular/core';
 import { GithubButtonService } from './service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'github-button',
@@ -26,15 +28,16 @@ import { GithubButtonService } from './service';
     </a>
     <ng-content></ng-content>
   `,
-  preserveWhitespaces: false,
   styleUrls: ['./style.less'],
   host: {
     '[class.github-btn-large]': `size === 'large'`,
   },
   encapsulation: ViewEncapsulation.Emulated,
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GithubButtonComponent implements OnChanges, OnInit {
+export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
+  private notify$: Subscription;
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
@@ -72,8 +75,7 @@ export class GithubButtonComponent implements OnChanges, OnInit {
   constructor(
     private srv: GithubButtonService,
     private cdr: ChangeDetectorRef,
-  ) {
-  }
+  ) {}
 
   private setCount(data: any) {
     this.count = data ? data[`${this.type}_count`] : 0;
@@ -81,10 +83,14 @@ export class GithubButtonComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.srv.notify.subscribe(res => this.setCount(res));
+    this.notify$ = this.srv.notify.subscribe(res => this.setCount(res));
   }
 
   ngOnChanges(): void {
     this.srv.req(this.namespace, this.repo);
+  }
+
+  ngOnDestroy(): void {
+    this.notify$.unsubscribe();
   }
 }
