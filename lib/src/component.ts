@@ -91,6 +91,8 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notify$.unsubscribe();
+    if (this.notify$) {
+      this.notify$.unsubscribe();
+    }
   }
 }
