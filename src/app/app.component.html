@@ -1,26 +1,34 @@
 <h1>ng-github-button</h1>
 <p>Unofficial GitHub buttons in Angular.</p>
 <div style="margin-top: 24px;">
-  <github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button"></github-button>
+  <github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button" [token]="token"></github-button>
   <div style="margin-top: 8px">
     <textarea highlight-js>
-      &lt;github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button"></github-button>
+      &lt;github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button" [token]="token"></github-button>
     </textarea>
   </div>
 </div>
 <div style="margin-top: 24px;">
-  <github-button type="subscribers" namespace="cipchk" repo="ng-github-button"></github-button>
+  <github-button type="subscribers" namespace="cipchk" repo="ng-github-button" [token]="token"></github-button>
   <div style="margin-top: 8px">
     <textarea highlight-js>
-      &lt;github-button type="subscribers" namespace="cipchk" repo="ng-github-button"></github-button>
+      &lt;github-button type="subscribers" namespace="cipchk" repo="ng-github-button" [token]="token"></github-button>
     </textarea>
   </div>
 </div>
 <div style="margin-top: 24px;">
-  <github-button type="forks" namespace="cipchk" repo="ng-github-button" [showZero]="true"></github-button>
+  <github-button type="forks" namespace="cipchk" repo="ng-github-button" [showZero]="true" [token]="token"></github-button>
   <div style="margin-top: 8px">
     <textarea highlight-js>
-      &lt;github-button type="forks" namespace="cipchk" repo="ng-github-button" [showZero]="true"></github-button>
+      &lt;github-button type="forks" namespace="cipchk" repo="ng-github-button" [showZero]="true" [token]="token"></github-button>
+    </textarea>
+  </div>
+</div>
+<div style="margin-top: 24px;">
+  <github-button [typeToLabel]="{diskUsage: 'Disk Usage'}" type="diskUsage" namespace="ng-alain" repo="ng-alain" [query]="diskUsageQuery" [callback]="diskUsageCallback"></github-button>
+  <div style="margin-top: 8px">
+    <textarea highlight-js>
+      &lt;github-button [typeToLabel]="{diskUsage: 'Disk Usage'}" type="diskUsage" namespace="ng-alain" repo="ng-alain" [token]="token" [query]="diskUsageQuery" [callback]="diskUsageCallback"></github-button>
     </textarea>
   </div>
 </div>

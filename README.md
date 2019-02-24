@@ -33,16 +33,20 @@ export class AppModule { }
 ### 2、Template
 
 ```html
-<github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button"></github-button>
+<github-button token="REQUIRED" type="stargazers" size="large" namespace="cipchk" repo="ng-github-button"></github-button>
 ```
 
 | Name    | Type           | Default  | Summary |
 | ------- | ------------- | ----- | ----- |
-| `type` | `stargazers,subscribers,forks` | - | - |
+| `token` | `string` | - | **REQUIRED** To communicate with the GraphQL server, you'll need an OAuth token with the right scopes, [Creating a personal access token for the command line](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) |
+| `namespace` | `string` | - | **REQUIRED** Your GitHub id or organization name. |
+| `repo` | `string` | - | **REQUIRED** The name of your repository. |
+| `type` | `stargazers,subscribers,watchers,forks` | `stargazers`| - |
 | `size` | `default,large` | - | - |
-| `namespace` | `string` | - | Your GitHub id or organization name. |
-| `repo` | `string` | - | The name of your repository. |
 | `showZero` | `boolean` | `false` | Can be show zero value |
+| `query` | `string` | - | Custom query string in github api v4, pls refer to [GraphQL API v4](https://developer.github.com/v4/guides/) |
+| `callback` | `(data: any) => string` | - | Callback in data render |
+| `svg` | `string` | - | Icon |
 
 ## Troubleshooting
 
