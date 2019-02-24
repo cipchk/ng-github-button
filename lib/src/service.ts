@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -10,22 +11,34 @@ export class GithubButtonService {
     return this._notify.asObservable();
   }
 
-  req(namespace: string, repo: string): void {
-    const url = `https://api.github.com/repos/${namespace}/${repo}`;
-    if (this.cached[url] != null) {
-      this._notify.next(this.cached[url]);
+  constructor(private http: HttpClient) {}
+
+  getKey(namespace: string, repo: string, query: string): string {
+    return `${namespace}_${repo}_${query}`;
+  }
+
+  req(namespace: string, repo: string, token: string, query: string): void {
+    const key = this.getKey(namespace, repo, query);
+    if (this.cached[key] === null) {
+      this._notify.next(this.cached[key]);
       return;
     }
-    this.cached[url] = {};
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        this.cached[url] = JSON.parse(xhr.responseText);
-        this._notify.next(this.cached[url]);
-        return;
-      }
-    };
-    xhr.open('GET', url, true);
-    xhr.send();
+    this.cached[key] = null;
+    this.http
+      .post(
+        `https://api.github.com/graphql`,
+        {
+          query,
+        },
+        {
+          headers: {
+            // Authorization: `bearer ${token}`,
+          },
+        },
+      )
+      .subscribe((res: any) => {
+        this.cached[key] = { key, data: res.data };
+        this._notify.next(this.cached[key]);
+      });
   }
 }
