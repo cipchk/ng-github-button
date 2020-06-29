@@ -1,5 +1,5 @@
 import { Component, ViewChild, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { GithubButtonModule } from '../src/module';
@@ -11,24 +11,24 @@ describe('github-button', () => {
   let dl: DebugElement;
   const win = window as any;
   const oldXMLHttpRequest = win.XMLHttpRequest;
-  function genXhr(status: number, text: any) {
+  function genXhr(status: number, text: any): void {
     spyOn(win, 'XMLHttpRequest').and.callFake(() => {
       return {
         responseText: JSON.stringify(text),
         readyState: XMLHttpRequest.DONE,
         status,
-        open() {},
-        send() {
+        open(): void {},
+        send(): void {
           this.onreadystatechange();
         },
-        abort() {},
+        abort(): void {},
       };
     });
   }
   function getCountEl(): HTMLElement {
     return dl.query(By.css('.gh-count')).nativeElement as HTMLElement;
   }
-  function getCount() {
+  function getCount(): number {
     const value = getCountEl().textContent.trim();
     return +value;
   }

@@ -1,0 +1,26 @@
+{
+  "name": "ng-github-button",
+  "version": "10.0.0",
+  "description": "Unofficial GitHub buttons in Angular.",
+  "author": "cipchk <cipchk@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cipchk/ng-github-button/issues"
+  },
+  "homepage": "https://cipchk.github.io/ng-github-button/",
+  "keywords": [
+    "angular",
+    "github",
+    "button",
+    "ng-github-button",
+    "ng2-github-button",
+    "angular-github-button",
+    "angular2-github-button",
+    "github-button",
+    "github button"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cipchk/ng-github-button.git"
+  }
+}

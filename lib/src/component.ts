@@ -62,14 +62,14 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
 
   // endregion
 
-  get repo_url() {
+  get repo_url(): string {
     return `//github.com/${this.namespace}/${this.repo}/`;
   }
 
-  get count_url() {
-    return `//github.com/${this.namespace}/${this.repo}/${this.typeToPath[
-      this.type
-    ] || this.type}/`;
+  get count_url(): string {
+    return `//github.com/${this.namespace}/${this.repo}/${
+      this.typeToPath[this.type] || this.type
+    }/`;
   }
 
   constructor(
@@ -77,13 +77,13 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
   ) {}
 
-  private setCount(data: any) {
+  private setCount(data: any): void {
     this.count = data ? data[`${this.type}_count`] : 0;
     this.cdr.detectChanges();
   }
 
   ngOnInit(): void {
-    this.notify$ = this.srv.notify.subscribe(res => this.setCount(res));
+    this.notify$ = this.srv.notify.subscribe((res) => this.setCount(res));
   }
 
   ngOnChanges(): void {
