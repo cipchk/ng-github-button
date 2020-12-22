@@ -18,12 +18,7 @@ import { Subscription } from 'rxjs';
       <span class="gh-ico" aria-hidden="true"></span>
       <span class="gh-text">{{ typeToLabel[type] }}</span>
     </a>
-    <a
-      class="gh-count"
-      target="_blank"
-      href="{{ count_url }}"
-      [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }"
-    >
+    <a class="gh-count" target="_blank" href="{{ count_url }}" [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }">
       {{ count }}
     </a>
     <ng-content></ng-content>
@@ -67,15 +62,10 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   get count_url(): string {
-    return `//github.com/${this.namespace}/${this.repo}/${
-      this.typeToPath[this.type] || this.type
-    }/`;
+    return `//github.com/${this.namespace}/${this.repo}/${this.typeToPath[this.type] || this.type}/`;
   }
 
-  constructor(
-    private srv: GithubButtonService,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  constructor(private srv: GithubButtonService, private cdr: ChangeDetectorRef) {}
 
   private setCount(data: any): void {
     this.count = data ? data[`${this.type}_count`] : 0;
