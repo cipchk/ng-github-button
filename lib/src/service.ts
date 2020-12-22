@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
   private cached: { [url: string]: any } = {};
+  // tslint:disable-next-line: variable-name
   private _notify = new BehaviorSubject<{ [url: string]: any }>(null);
 
   get notify(): Observable<{ [url: string]: any }> {
     return this._notify.asObservable();
   }
+
+  constructor(private http: HttpClient) {}
 
   req(namespace: string, repo: string): void {
     const url = `https://api.github.com/repos/${namespace}/${repo}`;
@@ -17,15 +21,9 @@ export class GithubButtonService {
       return;
     }
     this.cached[url] = {};
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        this.cached[url] = JSON.parse(xhr.responseText);
-        this._notify.next(this.cached[url]);
-        return;
-      }
-    };
-    xhr.open('GET', url, true);
-    xhr.send();
+    this.http.get(url).subscribe((res) => {
+      this.cached[url] = res;
+      this._notify.next(this.cached[url]);
+    });
   }
 }
