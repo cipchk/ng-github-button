@@ -11,6 +11,8 @@ import {
 import { GithubButtonService } from './service';
 import { Subscription } from 'rxjs';
 
+const isSSR = !(typeof document === 'object' && !!document);
+
 @Component({
   selector: 'github-button',
   template: `
@@ -43,19 +45,11 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   };
   count: number;
 
-  // region: fields
-
   @Input() type: 'stargazers' | 'subscribers' | 'forks' = 'stargazers';
-
   @Input() size: 'default' | 'large';
-
   @Input() namespace: string;
-
   @Input() repo: string;
-
   @Input() showZero = false;
-
-  // endregion
 
   get repo_url(): string {
     return `//github.com/${this.namespace}/${this.repo}/`;
@@ -77,6 +71,9 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges(): void {
+    if (isSSR) {
+      return;
+    }
     this.srv.req(this.namespace, this.repo);
   }
 
