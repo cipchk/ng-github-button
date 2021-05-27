@@ -16,7 +16,7 @@ describe('github-button', () => {
     return dl.query(By.css('.gh-count')).nativeElement as HTMLElement;
   }
   function getCount(): number {
-    const value = getCountEl().textContent.trim();
+    const value = getCountEl().textContent!.trim();
     return +value;
   }
 
@@ -65,7 +65,7 @@ describe('github-button', () => {
       fixture.detectChanges();
 
       mockHttp({ forks_count: 3 });
-      expect((dl.nativeElement as HTMLElement).querySelector('github-button').classList).toContain('github-btn-large');
+      expect((dl.nativeElement as HTMLElement).querySelector('github-button')!.classList).toContain('github-btn-large');
     });
 
     it('#repo_url', () => {
@@ -76,7 +76,7 @@ describe('github-button', () => {
       fixture.detectChanges();
 
       mockHttp({ forks_count: 3 });
-      expect((dl.nativeElement as HTMLElement).querySelector('.gh-btn').attributes.getNamedItem('href').textContent).toContain(
+      expect((dl.nativeElement as HTMLElement).querySelector('.gh-btn')!.attributes.getNamedItem('href')!.textContent).toContain(
         `//github.com/cipchk/ng-github-button/`,
       );
     });
@@ -126,10 +126,10 @@ describe('github-button', () => {
 })
 class TestComponent {
   @ViewChild('comp')
-  comp: GithubButtonComponent;
+  comp!: GithubButtonComponent;
   showZero = false;
   type = 'stargazers';
-  size: string;
-  namespace: string;
-  repo: string;
+  size: string = 'default';
+  namespace: string = '';
+  repo: string = '';
 }

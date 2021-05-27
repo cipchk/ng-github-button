@@ -6,9 +6,9 @@ import { HttpClient } from '@angular/common/http';
 export class GithubButtonService {
   private cached: { [url: string]: any } = {};
   // tslint:disable-next-line: variable-name
-  private _notify = new BehaviorSubject<{ [url: string]: any }>(null);
+  private _notify = new BehaviorSubject<{ [url: string]: any } | null>(null);
 
-  get notify(): Observable<{ [url: string]: any }> {
+  get notify(): Observable<{ [url: string]: any } | null> {
     return this._notify.asObservable();
   }
 
