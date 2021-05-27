@@ -34,21 +34,21 @@ const isSSR = !(typeof document === 'object' && !!document);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
-  private notify$: Subscription;
+  private notify$: Subscription | null = null;
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
     forks: 'Fork',
   };
-  typeToPath = {
+  typeToPath: { [key: string]: string } = {
     forks: 'network',
   };
-  count: number;
+  count = 0;
 
   @Input() type: 'stargazers' | 'subscribers' | 'forks' = 'stargazers';
-  @Input() size: 'default' | 'large';
-  @Input() namespace: string;
-  @Input() repo: string;
+  @Input() size: 'default' | 'large' = 'default';
+  @Input() namespace!: string;
+  @Input() repo!: string;
   @Input() showZero = false;
 
   get repo_url(): string {
