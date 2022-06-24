@@ -1,11 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { GithubButtonComponent } from './component';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [GithubButtonComponent],
+  imports: [GithubButtonComponent],
   exports: [GithubButtonComponent],
 })
 export class GithubButtonModule {}
