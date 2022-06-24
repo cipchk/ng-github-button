@@ -1,6 +1,6 @@
 {
   "name": "ng-github-button",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Unofficial GitHub buttons in Angular.",
   "author": "cipchk <cipchk@qq.com>",
   "license": "MIT",
@@ -17,7 +17,8 @@
     "angular-github-button",
     "angular2-github-button",
     "github-button",
-    "github button"
+    "github button",
+    "angular standalone library"
   ],
   "repository": {
     "type": "git",

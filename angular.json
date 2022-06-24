@@ -101,8 +101,7 @@
       }
     }
   },
-  "defaultProject": "ng-github-button",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": "@angular-eslint/schematics"
   }
 }
