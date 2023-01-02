@@ -37,7 +37,7 @@ const isSSR = !(typeof document === 'object' && !!document);
   imports: [CommonModule],
 })
 export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
-  private notify$: Subscription | null = null;
+  private notify$?: Subscription;
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
@@ -81,8 +81,6 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.notify$) {
-      this.notify$.unsubscribe();
-    }
+    this.notify$?.unsubscribe();
   }
 }
