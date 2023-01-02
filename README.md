@@ -23,9 +23,9 @@ import `GithubButtonModule`。
 import { GithubButtonModule } from 'ng-github-button';
 
 @NgModule({
-    imports: [ BrowserModule, GithubButtonModule ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [ BrowserModule, GithubButtonModule ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 ```

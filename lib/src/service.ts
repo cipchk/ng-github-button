@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
   private cached: { [url: string]: any } = {};
-  // tslint:disable-next-line: variable-name
   private _notify = new BehaviorSubject<{ [url: string]: any } | null>(null);
 
   get notify(): Observable<{ [url: string]: any } | null> {
