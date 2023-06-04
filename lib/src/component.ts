@@ -50,8 +50,8 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() type: 'stargazers' | 'subscribers' | 'forks' = 'stargazers';
   @Input() size: 'default' | 'large' = 'default';
-  @Input() namespace!: string;
-  @Input() repo!: string;
+  @Input({ required: true }) namespace!: string;
+  @Input({ required: true }) repo!: string;
   @Input() showZero = false;
 
   get repo_url(): string {
