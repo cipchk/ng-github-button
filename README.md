@@ -4,6 +4,7 @@ Unofficial GitHub buttons in Angular.
 
 [![NPM version](https://img.shields.io/npm/v/ng-github-button.svg)](https://www.npmjs.com/package/ng-github-button)
 ![Ci](https://github.com/cipchk/ng-github-button/workflows/Ci/badge.svg)
+[![codecov](https://codecov.io/github/cipchk/ng-github-button/graph/badge.svg?token=7iMHv5pw5J)](https://codecov.io/github/cipchk/ng-github-button)
 
 ## Demo
 
