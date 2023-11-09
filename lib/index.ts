@@ -1,2 +1,1 @@
-export * from './src/component';
-export * from './src/module';
+export * from './public-api';
