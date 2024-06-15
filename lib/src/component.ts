@@ -10,18 +10,18 @@ import {
 } from '@angular/core';
 import { GithubButtonService } from './service';
 import { Subscription } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 
 const isSSR = !(typeof document === 'object' && !!document);
 
 @Component({
   selector: 'github-button',
   template: `
-    <a class="gh-btn" [href]="repo_url" target="_blank">
+    <a class="gh-btn" [attr.href]="repo_url" target="_blank">
       <span class="gh-ico" aria-hidden="true"></span>
       <span class="gh-text">{{ typeToLabel[type] }}</span>
     </a>
-    <a class="gh-count" target="_blank" [href]="count_url" [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }">
+    <a class="gh-count" target="_blank" [attr.href]="count_url" [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }">
       {{ count }}
     </a>
     <ng-content></ng-content>
@@ -34,7 +34,7 @@ const isSSR = !(typeof document === 'object' && !!document);
   preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgStyle],
 })
 export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
   private notify$?: Subscription;
