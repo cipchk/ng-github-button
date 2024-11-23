@@ -6,11 +6,11 @@ import {
   ChangeDetectorRef,
   OnInit,
   ViewEncapsulation,
-  OnDestroy,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { GithubButtonService } from './service';
-import { Subscription } from 'rxjs';
-import { CommonModule, NgStyle } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const isSSR = !(typeof document === 'object' && !!document);
 
@@ -21,7 +21,7 @@ const isSSR = !(typeof document === 'object' && !!document);
       <span class="gh-ico" aria-hidden="true"></span>
       <span class="gh-text">{{ typeToLabel[type] }}</span>
     </a>
-    <a class="gh-count" target="_blank" [attr.href]="count_url" [ngStyle]="{ display: showZero || count > 0 ? 'block' : 'none' }">
+    <a class="gh-count" target="_blank" [attr.href]="count_url" [style.display]="showZero || count > 0 ? 'block' : 'none'">
       {{ count }}
     </a>
     <ng-content></ng-content>
@@ -33,11 +33,11 @@ const isSSR = !(typeof document === 'object' && !!document);
   encapsulation: ViewEncapsulation.Emulated,
   preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgStyle],
 })
-export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
-  private notify$?: Subscription;
+export class GithubButtonComponent implements OnChanges, OnInit {
+  private srv = inject(GithubButtonService);
+  private cdr = inject(ChangeDetectorRef);
+  private d$ = inject(DestroyRef);
   typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
@@ -62,15 +62,13 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
     return `//github.com/${this.namespace}/${this.repo}/${this.typeToPath[this.type] || this.type}/`;
   }
 
-  constructor(private srv: GithubButtonService, private cdr: ChangeDetectorRef) {}
-
   private setCount(data: any): void {
     this.count = data ? data[`${this.type}_count`] : 0;
     this.cdr.detectChanges();
   }
 
   ngOnInit(): void {
-    this.notify$ = this.srv.notify.subscribe((res) => this.setCount(res));
+    this.srv.notify.pipe(takeUntilDestroyed(this.d$)).subscribe((res) => this.setCount(res));
   }
 
   ngOnChanges(): void {
@@ -78,9 +76,5 @@ export class GithubButtonComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
     this.srv.req(this.namespace, this.repo);
-  }
-
-  ngOnDestroy(): void {
-    this.notify$?.unsubscribe();
   }
 }

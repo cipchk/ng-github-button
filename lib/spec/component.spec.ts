@@ -1,10 +1,10 @@
 import { Component, ViewChild, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 
-import { GithubButtonModule } from '../src/module';
 import { GithubButtonComponent } from '../src/component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('github-button', () => {
   let fixture: ComponentFixture<TestComponent>;
@@ -22,8 +22,8 @@ describe('github-button', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, GithubButtonModule],
-      declarations: [TestComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+      imports: [TestComponent],
     });
     fixture = TestBed.createComponent(TestComponent);
     context = fixture.componentInstance;
@@ -123,6 +123,7 @@ describe('github-button', () => {
   template: `
     <github-button #comp [showZero]="showZero" [type]="type" [size]="size" [namespace]="namespace" [repo]="repo"></github-button>
   `,
+  imports: [GithubButtonComponent],
 })
 class TestComponent {
   @ViewChild('comp')
