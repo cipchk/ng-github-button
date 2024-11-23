@@ -68,5 +68,6 @@
     "ng-packagr": "^18.0.0",
     "ngx-highlight-js": "^18.0.0",
     "typescript": "~5.4.2"
-  }
+  },
+  "packageManager": "yarn@4.5.2"
 }
