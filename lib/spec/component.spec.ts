@@ -1,7 +1,7 @@
-import { Component, ViewChild, DebugElement } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { GithubButtonComponent } from '../src/component';
 import { provideHttpClient } from '@angular/common/http';
@@ -33,8 +33,8 @@ describe('github-button', () => {
   });
 
   function mockHttp(data: any, status = 200): void {
-    const ret = httpBed.expectOne(() => true) as TestRequest;
-    ret.flush(data, { status, statusText: status.toString() });
+    httpBed.expectOne(() => true).flush(data, { status, statusText: status.toString() });
+    TestBed.tick();
   }
 
   describe('[property]', () => {
@@ -121,16 +121,14 @@ describe('github-button', () => {
 
 @Component({
   template: `
-    <github-button #comp [showZero]="showZero" [type]="type" [size]="size" [namespace]="namespace" [repo]="repo"></github-button>
+    <github-button [showZero]="showZero" [type]="type" [size]="size" [namespace]="namespace" [repo]="repo" />
   `,
   imports: [GithubButtonComponent],
 })
 class TestComponent {
-  @ViewChild('comp')
-  comp!: GithubButtonComponent;
   showZero = false;
   type = 'stargazers';
-  size: string = 'default';
-  namespace: string = '';
-  repo: string = '';
+  size = 'default';
+  namespace = '';
+  repo = '';
 }
