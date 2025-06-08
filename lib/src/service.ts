@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
   private http = inject(HttpClient);
-  private cached: { [url: string]: any } = {};
-  private _notify = new BehaviorSubject<{ [url: string]: any } | null>(null);
+  private cached: Record<string, any> = {};
+  private _notify = new BehaviorSubject<Record<string, any> | null>(null);
 
-  get notify(): Observable<{ [url: string]: any } | null> {
+  get notify(): Observable<Record<string, any> | null> {
     return this._notify.asObservable();
   }
 
