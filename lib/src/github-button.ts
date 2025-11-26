@@ -10,7 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { GithubButtonService } from './service';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const isSSR = !(typeof document === 'object' && !!document);
 
@@ -64,9 +64,6 @@ export class GithubButtonComponent {
   protected count = computed(() => this._data()?.[`${this.type()}_count`] ?? 0);
 
   constructor() {
-    toObservable(this.type).pipe(takeUntilDestroyed()).subscribe((res) => {
-      console.log('type changed:', res);
-    });
     this.srv.notify.pipe(takeUntilDestroyed()).subscribe(res => {
       this._data.set(res);
     });

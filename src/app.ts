@@ -33,7 +33,7 @@ import { HighlightJsDirective } from 'ngx-highlight-js';
     </div> `,
   imports: [GithubButtonComponent, HighlightJsDirective],
 })
-export class AppComponent {
+export class App {
   ns = 'cipchk';
   repo = 'ng-github-button';
 
