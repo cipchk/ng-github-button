@@ -1,9 +1,9 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { GithubButtonComponent } from '../src/component';
+import { GithubButtonComponent, GithubButtonSize, GithubButtonType } from './github-button';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('github-button', () => {
@@ -20,12 +20,13 @@ describe('github-button', () => {
     return +value;
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideZonelessChangeDetection()],
       imports: [TestComponent],
     });
     fixture = TestBed.createComponent(TestComponent);
+    await fixture.whenStable();
     context = fixture.componentInstance;
     dl = fixture.debugElement;
 
@@ -33,47 +34,41 @@ describe('github-button', () => {
   });
 
   function mockHttp(data: any, status = 200): void {
-    httpBed.expectOne(() => true).flush(data, { status, statusText: status.toString() });
+    const req = httpBed.expectOne(() => true);
+    req.flush(data, { status, statusText: status.toString() });
     TestBed.tick();
   }
 
   describe('[property]', () => {
     it(`#type="stargazers"`, () => {
-      context.type = 'stargazers';
-      fixture.detectChanges();
+      context.type.set('stargazers');
       mockHttp({ stargazers_count: 10 });
       expect(getCount()).toBe(10);
     });
     it(`#type="subscribers"`, () => {
-      context.type = 'subscribers';
-      fixture.detectChanges();
-
+      context.type.set('subscribers');
       mockHttp({ subscribers_count: 5 });
       expect(getCount()).toBe(5);
     });
     it(`#type="forks"`, () => {
-      context.type = 'forks';
-      fixture.detectChanges();
-
+      context.type.set('forks');
       mockHttp({ forks_count: 3 });
       expect(getCount()).toBe(3);
     });
 
     it('#size', () => {
-      context.type = 'forks';
-      context.size = 'large';
-      fixture.detectChanges();
+      context.type.set('forks');
+      context.size.set('large');
 
       mockHttp({ forks_count: 3 });
       expect((dl.nativeElement as HTMLElement).querySelector('github-button')!.classList).toContain('github-btn-large');
     });
 
     it('#repo_url', () => {
-      context.type = 'forks';
-      context.size = 'large';
-      context.namespace = 'cipchk';
-      context.repo = 'ng-github-button';
-      fixture.detectChanges();
+      context.type.set('forks');
+      context.size.set('large');
+      context.namespace.set('cipchk');
+      context.repo.set('ng-github-button');
 
       mockHttp({ forks_count: 3 });
       expect((dl.nativeElement as HTMLElement).querySelector('.gh-btn')!.attributes.getNamedItem('href')!.textContent).toContain(
@@ -83,37 +78,31 @@ describe('github-button', () => {
   });
 
   it('should be show count when request invalid data and showZero is true', () => {
-    context.type = 'forks';
-    context.showZero = true;
-    fixture.detectChanges();
+    context.type.set('forks');
+    context.showZero.set(true);
 
     mockHttp(null);
     expect(getCountEl().style.display).toBe('block');
   });
 
   it('should be hide count when request invalid data', () => {
-    context.type = 'forks';
-    fixture.detectChanges();
+    context.type.set('forks');
 
     mockHttp(null);
     expect(getCountEl().style.display).toBe('none');
   });
 
   it('should be hide count when invalid request', () => {
-    context.type = 'forks';
-    fixture.detectChanges();
+    context.type.set('forks');
 
     mockHttp(null, 201);
     expect(getCountEl().style.display).toBe('none');
   });
 
-  it('should be cached data', () => {
-    context.type = 'stargazers';
-    fixture.detectChanges();
-
+  it('should be change type', () => {
     mockHttp({ stargazers_count: 10, subscribers_count: 11 });
     expect(getCount()).toBe(10);
-    context.type = 'subscribers';
+    context.type.set('subscribers');
     fixture.detectChanges();
     expect(getCount()).toBe(11);
   });
@@ -121,14 +110,14 @@ describe('github-button', () => {
 
 @Component({
   template: `
-    <github-button [showZero]="showZero" [type]="type" [size]="size" [namespace]="namespace" [repo]="repo" />
+    <github-button [showZero]="showZero()" [type]="type()" [size]="size()" [namespace]="namespace()" [repo]="repo()" />
   `,
   imports: [GithubButtonComponent],
 })
 class TestComponent {
-  showZero = false;
-  type = 'stargazers';
-  size = 'default';
-  namespace = '';
-  repo = '';
+  showZero = signal(false);
+  type = signal<GithubButtonType>('stargazers');
+  size = signal<GithubButtonSize>('default');
+  namespace = signal('');
+  repo = signal('');
 }

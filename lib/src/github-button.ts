@@ -7,10 +7,10 @@ import {
   booleanAttribute,
   computed,
   effect,
-  afterNextRender,
   signal,
 } from '@angular/core';
 import { GithubButtonService } from './service';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 const isSSR = !(typeof document === 'object' && !!document);
 
@@ -38,40 +38,41 @@ export type GithubButtonSize = 'default' | 'large';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GithubButtonComponent {
-  private srv = inject(GithubButtonService);
-  typeToLabel = {
+  private readonly srv = inject(GithubButtonService);
+  readonly typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
     forks: 'Fork',
   };
-  private typeToPath: Record<string, string> = {
+  private readonly typeToPath: Record<string, string> = {
     forks: 'network',
   };
 
-  type = input<GithubButtonType>('stargazers');
-  size = input<GithubButtonSize>('default');
-  namespace = input.required<string>();
-  repo = input.required<string>();
-  showZero = input(false, { transform: booleanAttribute });
+  readonly type = input<GithubButtonType>('stargazers');
+  readonly size = input<GithubButtonSize>('default');
+  readonly namespace = input.required<string>();
+  readonly repo = input.required<string>();
+  readonly showZero = input(false, { transform: booleanAttribute });
 
-  repo_url = computed(() => `//github.com/${this.namespace()}/${this.repo()}/`);
-  count_url = computed(() => {
+  protected repo_url = computed(() => `//github.com/${this.namespace()}/${this.repo()}/`);
+  protected count_url = computed(() => {
     const repo_url = this.repo_url();
     const type = this.type();
     return `${repo_url}${this.typeToPath[type] || type}/`;
   });
-  count = signal(0);
+  private _data = signal<Record<string, any> | null>(null);
+  protected count = computed(() => this._data()?.[`${this.type()}_count`] ?? 0);
 
   constructor() {
-    afterNextRender(() => {
-      this.srv.notify.subscribe(res => {
-        this.count.set(res ? res[`${this.type()}_count`] : 0);
-      });
+    toObservable(this.type).pipe(takeUntilDestroyed()).subscribe((res) => {
+      console.log('type changed:', res);
+    });
+    this.srv.notify.pipe(takeUntilDestroyed()).subscribe(res => {
+      this._data.set(res);
     });
     effect(() => {
       const namespace = this.namespace();
       const repo = this.repo();
-      this.type();
       if (isSSR) return;
       this.srv.req(namespace, repo);
     });
