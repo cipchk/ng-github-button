@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
   private http = inject(HttpClient);
   private cached: Record<string, any> = {};
-  private _notify = new BehaviorSubject<Record<string, any> | null>(null);
+  private _notify = new Subject<Record<string, any>>();
 
-  get notify(): Observable<Record<string, any> | null> {
+  get notify(): Observable<Record<string, any>> {
     return this._notify.asObservable();
   }
 
