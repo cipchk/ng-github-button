@@ -14,7 +14,6 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "baseUrl": ".",
     "paths": {
       "ng-github-button": [
         "./lib/src/public-api"

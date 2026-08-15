@@ -7,10 +7,11 @@ import {
   booleanAttribute,
   computed,
   effect,
-  signal,
+  signal
 } from '@angular/core';
-import { GithubButtonService } from './service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { GithubButtonService } from './service';
 
 const isSSR = !(typeof document === 'object' && !!document);
 
@@ -24,28 +25,33 @@ export type GithubButtonSize = 'default' | 'large';
       <span class="gh-ico" aria-hidden="true"></span>
       <span class="gh-text">{{ typeToLabel[type()] }}</span>
     </a>
-      <a class="gh-count" target="_blank" [attr.href]="count_url()" [style.display]="showZero() || count() > 0 ? 'block' : 'none'">
-        {{ count() }}
-      </a>
+    <a
+      class="gh-count"
+      target="_blank"
+      [attr.href]="count_url()"
+      [style.display]="showZero() || count() > 0 ? 'block' : 'none'"
+    >
+      {{ count() }}
+    </a>
     <ng-content />
   `,
   styleUrls: ['./style.less'],
   host: {
-    '[class.github-btn-large]': `size() === 'large'`,
+    '[class.github-btn-large]': `size() === 'large'`
   },
   encapsulation: ViewEncapsulation.Emulated,
   preserveWhitespaces: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GithubButtonComponent {
   private readonly srv = inject(GithubButtonService);
   readonly typeToLabel = {
     stargazers: 'Star',
     subscribers: 'Watch',
-    forks: 'Fork',
+    forks: 'Fork'
   };
   private readonly typeToPath: Record<string, string> = {
-    forks: 'network',
+    forks: 'network'
   };
 
   readonly type = input<GithubButtonType>('stargazers');

@@ -1,10 +1,10 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { GithubButtonComponent, GithubButtonSize, GithubButtonType } from './github-button';
-import { provideHttpClient } from '@angular/common/http';
 
 describe('github-button', () => {
   let fixture: ComponentFixture<TestComponent>;
@@ -23,7 +23,7 @@ describe('github-button', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting(), provideZonelessChangeDetection()],
-      imports: [TestComponent],
+      imports: [TestComponent]
     });
     fixture = TestBed.createComponent(TestComponent);
     await fixture.whenStable();
@@ -71,9 +71,9 @@ describe('github-button', () => {
       context.repo.set('ng-github-button');
 
       mockHttp({ forks_count: 3 });
-      expect((dl.nativeElement as HTMLElement).querySelector('.gh-btn')!.attributes.getNamedItem('href')!.textContent).toContain(
-        `//github.com/cipchk/ng-github-button/`,
-      );
+      expect(
+        (dl.nativeElement as HTMLElement).querySelector('.gh-btn')!.attributes.getNamedItem('href')!.textContent
+      ).toContain(`//github.com/cipchk/ng-github-button/`);
     });
   });
 
@@ -112,7 +112,7 @@ describe('github-button', () => {
   template: `
     <github-button [showZero]="showZero()" [type]="type()" [size]="size()" [namespace]="namespace()" [repo]="repo()" />
   `,
-  imports: [GithubButtonComponent],
+  imports: [GithubButtonComponent]
 })
 class TestComponent {
   showZero = signal(false);

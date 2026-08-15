@@ -24,11 +24,11 @@ import `GithubButtonModule`。
 import { GithubButtonModule } from 'ng-github-button';
 
 @NgModule({
-  imports: [ BrowserModule, GithubButtonModule ],
+  imports: [BrowserModule, GithubButtonModule],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 ### 2、Template
@@ -37,13 +37,13 @@ export class AppModule { }
 <github-button type="stargazers" size="large" namespace="cipchk" repo="ng-github-button"></github-button>
 ```
 
-| Name    | Type           | Default  | Summary |
-| ------- | ------------- | ----- | ----- |
-| `type` | `stargazers,subscribers,forks` | - | - |
-| `size` | `default,large` | - | - |
-| `namespace` | `string` | - | Your GitHub id or organization name. |
-| `repo` | `string` | - | The name of your repository. |
-| `showZero` | `boolean` | `false` | Can be show zero value |
+| Name        | Type                           | Default | Summary                              |
+| ----------- | ------------------------------ | ------- | ------------------------------------ |
+| `type`      | `stargazers,subscribers,forks` | -       | -                                    |
+| `size`      | `default,large`                | -       | -                                    |
+| `namespace` | `string`                       | -       | Your GitHub id or organization name. |
+| `repo`      | `string`                       | -       | The name of your repository.         |
+| `showZero`  | `boolean`                      | `false` | Can be show zero value               |
 
 ## Troubleshooting
 
