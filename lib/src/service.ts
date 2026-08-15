@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class GithubButtonService {
@@ -19,7 +19,7 @@ export class GithubButtonService {
       return;
     }
     this.cached[url] = {};
-    this.http.get(url).subscribe((res) => {
+    this.http.get(url).subscribe(res => {
       this.cached[url] = res;
       this._notify.next(this.cached[url]);
     });
